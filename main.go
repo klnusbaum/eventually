@@ -9,6 +9,12 @@ import (
 )
 
 func main() {
+	// we use go rountines to represent seperate processes/nodes
+	// and channels to represent a network connection.
+	// It doesn't seem worth it at the moment to actually
+	// create seperate processes and network connections
+	// as this is just a demo and is functionally equivalent.
+
 	c12 := make(chan counters.GCounter, 1)
 	c13 := make(chan counters.GCounter, 1)
 	c21 := make(chan counters.GCounter, 1)
