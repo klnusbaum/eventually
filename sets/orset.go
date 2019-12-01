@@ -75,27 +75,13 @@ func (s *ORSet) Merge(other *ORSet) *ORSet {
 	mergedAdds := make(map[string]*GSet)
 	mergedRemoves := make(map[string]*GSet)
 
-	addKeys := make(map[string]struct{})
-	for e := range s.adds {
-		addKeys[e] = struct{}{}
-	}
-	for e := range other.adds {
-		addKeys[e] = struct{}{}
-	}
-
-	for e := range addKeys {
+	allAdds := allElements(s.adds, other.adds)
+	for e := range allAdds {
 		mergedAdds[e] = s.adds[e].Merge(other.adds[e])
 	}
 
-	removeKeys := make(map[string]struct{})
-	for e := range s.removes {
-		removeKeys[e] = struct{}{}
-	}
-	for e := range other.removes {
-		removeKeys[e] = struct{}{}
-	}
-
-	for e := range removeKeys {
+	allRemoves := allElements(s.removes, other.removes)
+	for e := range allRemoves {
 		mergedRemoves[e] = s.removes[e].Merge(other.removes[e])
 	}
 
@@ -103,4 +89,18 @@ func (s *ORSet) Merge(other *ORSet) *ORSet {
 		adds:    mergedAdds,
 		removes: mergedRemoves,
 	}
+}
+
+func allElements(s1, s2 map[string]*GSet) map[string]struct{} {
+	all := make(map[string]struct{})
+
+	for e := range s1 {
+		all[e] = struct{}{}
+	}
+
+	for e := range s2 {
+		all[e] = struct{}{}
+	}
+
+	return all
 }
