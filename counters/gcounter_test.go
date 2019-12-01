@@ -1,4 +1,4 @@
-package gcount
+package counters
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestSingle(t *testing.T) {
-	counter := New(uuid.Must(uuid.NewV4()), nil)
+	counter := NewGCounter(uuid.Must(uuid.NewV4()), nil)
 
 	counter.Inc()
 	counter.Inc()
@@ -22,8 +22,8 @@ func TestSingle(t *testing.T) {
 }
 
 func TestMulti(t *testing.T) {
-	c1 := New(uuid.Must(uuid.NewV4()), nil)
-	c2 := New(uuid.Must(uuid.NewV4()), nil)
+	c1 := NewGCounter(uuid.Must(uuid.NewV4()), nil)
+	c2 := NewGCounter(uuid.Must(uuid.NewV4()), nil)
 
 	c1.Inc()
 	c1.Inc()

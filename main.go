@@ -5,43 +5,43 @@ import (
 	"sync"
 
 	"github.com/gofrs/uuid"
-	"github.com/klnusbaum/eventually/gcount"
+	"github.com/klnusbaum/eventually/counters"
 )
 
 func main() {
-	c12 := make(chan gcount.Payload, 1)
-	c13 := make(chan gcount.Payload, 1)
-	c21 := make(chan gcount.Payload, 1)
-	c23 := make(chan gcount.Payload, 1)
-	c31 := make(chan gcount.Payload, 1)
-	c32 := make(chan gcount.Payload, 1)
+	c12 := make(chan counters.Payload, 1)
+	c13 := make(chan counters.Payload, 1)
+	c21 := make(chan counters.Payload, 1)
+	c23 := make(chan counters.Payload, 1)
+	c31 := make(chan counters.Payload, 1)
+	c32 := make(chan counters.Payload, 1)
 
 	var allDone sync.WaitGroup
 	allDone.Add(3)
 
 	go doCount(
 		&allDone,
-		[]chan gcount.Payload{c12, c13},
-		[]chan gcount.Payload{c21, c31},
+		[]chan counters.Payload{c12, c13},
+		[]chan counters.Payload{c21, c31},
 	)
 	go doCount(
 		&allDone,
-		[]chan gcount.Payload{c21, c23},
-		[]chan gcount.Payload{c12, c32},
+		[]chan counters.Payload{c21, c23},
+		[]chan counters.Payload{c12, c32},
 	)
 	go doCount(
 		&allDone,
-		[]chan gcount.Payload{c31, c32},
-		[]chan gcount.Payload{c13, c23},
+		[]chan counters.Payload{c31, c32},
+		[]chan counters.Payload{c13, c23},
 	)
 
 	allDone.Wait()
 }
 
-func doCount(allDone *sync.WaitGroup, txs, rxs []chan gcount.Payload) {
+func doCount(allDone *sync.WaitGroup, txs, rxs []chan counters.Payload) {
 	defer allDone.Done()
 	id := uuid.Must(uuid.NewV4())
-	counter := gcount.New(id, nil)
+	counter := counters.NewGCounter(id, nil)
 	counter.Inc()
 	counter.Inc()
 	counter.Inc()

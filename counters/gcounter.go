@@ -1,4 +1,4 @@
-package gcount
+package counters
 
 import (
 	"sync"
@@ -6,7 +6,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-type Counter struct {
+type GCounter struct {
 	counts Payload
 	myID   uuid.UUID
 	m      sync.RWMutex
@@ -14,8 +14,8 @@ type Counter struct {
 
 type Payload map[uuid.UUID]int
 
-func New(myID uuid.UUID, init Payload) Counter {
-	counter := Counter{
+func NewGCounter(myID uuid.UUID, init Payload) GCounter {
+	counter := GCounter{
 		counts: make(Payload, len(init)),
 		myID:   myID,
 	}
@@ -24,13 +24,13 @@ func New(myID uuid.UUID, init Payload) Counter {
 	return counter
 }
 
-func (c *Counter) Inc() {
+func (c *GCounter) Inc() {
 	c.m.Lock()
 	defer c.m.Unlock()
 	c.counts[c.myID] += 1
 }
 
-func (c *Counter) Val() int {
+func (c *GCounter) Val() int {
 	c.m.RLock()
 	defer c.m.RUnlock()
 
@@ -41,7 +41,7 @@ func (c *Counter) Val() int {
 	return sum
 }
 
-func (c *Counter) Merge(p Payload) {
+func (c *GCounter) Merge(p Payload) {
 	c.m.Lock()
 	defer c.m.Unlock()
 
@@ -50,7 +50,7 @@ func (c *Counter) Merge(p Payload) {
 	}
 }
 
-func (c *Counter) Serialize() Payload {
+func (c *GCounter) Serialize() Payload {
 	c.m.RLock()
 	defer c.m.RUnlock()
 
