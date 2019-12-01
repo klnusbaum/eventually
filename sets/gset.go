@@ -41,7 +41,11 @@ func (s *GSet) Diff(other *GSet) []string {
 	return diff
 }
 
-func (s *GSet) Merge(other GSet) *GSet {
+func (s *GSet) Merge(other *GSet) *GSet {
+	if s == nil {
+		return other
+	}
+
 	var elements []string
 	s.ForAll(func(e string) {
 		elements = append(elements, e)

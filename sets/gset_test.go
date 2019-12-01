@@ -57,8 +57,8 @@ func TestMultiGSet(t *testing.T) {
 	assert.True(t, s2.Lookup("kurtis"))
 	assert.False(t, s2.Lookup("doesn't exist"))
 
-	s1 = s1.Merge(*s2)
-	s2 = s2.Merge(*s1)
+	s1 = s1.Merge(s2)
+	s2 = s2.Merge(s1)
 
 	assert.True(t, s1.Lookup("hello"))
 	assert.True(t, s1.Lookup("goodbye"))
@@ -73,4 +73,12 @@ func TestMultiGSet(t *testing.T) {
 	assert.True(t, s2.Lookup("cheese"))
 	assert.True(t, s2.Lookup("ashley"))
 	assert.False(t, s2.Lookup("doesn't exist"))
+
+	var nilSet *GSet
+	nilMerged := nilSet.Merge(s1)
+	assert.True(t, nilMerged.Lookup("hello"))
+	assert.True(t, nilMerged.Lookup("goodbye"))
+	assert.True(t, nilMerged.Lookup("kurtis"))
+	assert.True(t, nilMerged.Lookup("cheese"))
+	assert.True(t, nilMerged.Lookup("ashley"))
 }
