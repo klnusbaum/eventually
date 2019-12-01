@@ -5,17 +5,16 @@ import (
 )
 
 type GCounter struct {
-	counts Payload
+	counts map[uuid.UUID]int
 	myID   uuid.UUID
 }
 
-func NewGCounter(myID uuid.UUID, init Payload) *GCounter {
+func NewGCounter(myID uuid.UUID) *GCounter {
 	counter := GCounter{
-		counts: make(Payload, len(init)),
+		counts: make(map[uuid.UUID]int),
 		myID:   myID,
 	}
 
-	counter.Merge(init)
 	return &counter
 }
 
@@ -31,18 +30,10 @@ func (c *GCounter) Val() int {
 	return sum
 }
 
-func (c *GCounter) Merge(p Payload) {
-	for id, count := range p {
+func (c *GCounter) Merge(other *GCounter) {
+	for id, count := range other.counts {
 		c.counts[id] = imax(c.counts[id], count)
 	}
-}
-
-func (c *GCounter) Serialize() Payload {
-	copied := make(Payload, len(c.counts))
-	for id, count := range c.counts {
-		copied[id] = count
-	}
-	return copied
 }
 
 func imax(a, b int) int {

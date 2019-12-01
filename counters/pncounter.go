@@ -10,15 +10,13 @@ type PNCounter struct {
 	myID       uuid.UUID
 }
 
-func NewPNCounter(myID uuid.UUID, pos Payload, neg Payload) *PNCounter {
+func NewPNCounter(myID uuid.UUID) *PNCounter {
 	counter := PNCounter{
-		posCounter: NewGCounter(myID, pos),
-		negCounter: NewGCounter(myID, neg),
+		posCounter: NewGCounter(myID),
+		negCounter: NewGCounter(myID),
 		myID:       myID,
 	}
 
-	counter.posCounter.Merge(pos)
-	counter.negCounter.Merge(neg)
 	return &counter
 }
 
@@ -34,11 +32,7 @@ func (c *PNCounter) Val() int {
 	return c.posCounter.Val() - c.negCounter.Val()
 }
 
-func (c *PNCounter) Merge(pos, neg Payload) {
-	c.posCounter.Merge(pos)
-	c.negCounter.Merge(neg)
-}
-
-func (c *PNCounter) Serialize() (Payload, Payload) {
-	return c.posCounter.Serialize(), c.negCounter.Serialize()
+func (c *PNCounter) Merge(other *PNCounter) {
+	c.posCounter.Merge(other.posCounter)
+	c.negCounter.Merge(other.negCounter)
 }

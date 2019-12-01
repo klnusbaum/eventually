@@ -8,7 +8,7 @@ import (
 )
 
 func TestSingleGCounter(t *testing.T) {
-	counter := NewGCounter(uuid.Must(uuid.NewV4()), nil)
+	counter := NewGCounter(uuid.Must(uuid.NewV4()))
 
 	counter.Inc()
 	counter.Inc()
@@ -23,8 +23,8 @@ func TestSingleGCounter(t *testing.T) {
 }
 
 func TestMultiGCounter(t *testing.T) {
-	c1 := NewGCounter(uuid.Must(uuid.NewV4()), nil)
-	c2 := NewGCounter(uuid.Must(uuid.NewV4()), nil)
+	c1 := NewGCounter(uuid.Must(uuid.NewV4()))
+	c2 := NewGCounter(uuid.Must(uuid.NewV4()))
 
 	c1.Inc()
 	c1.Inc()
@@ -37,11 +37,8 @@ func TestMultiGCounter(t *testing.T) {
 	c2.Inc()
 	assert.Equal(t, 1, c2.Val())
 
-	p1 := c1.Serialize()
-	p2 := c2.Serialize()
-
-	c1.Merge(p2)
-	c2.Merge(p1)
+	c1.Merge(c2)
+	c2.Merge(c1)
 
 	assert.Equal(t, 5, c1.Val())
 	assert.Equal(t, 5, c2.Val())
