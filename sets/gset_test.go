@@ -57,11 +57,8 @@ func TestMultiGSet(t *testing.T) {
 	assert.True(t, s2.Lookup("kurtis"))
 	assert.False(t, s2.Lookup("doesn't exist"))
 
-	p1 := s1.Serialize()
-	p2 := s2.Serialize()
-
-	s1.Merge(p2)
-	s2.Merge(p1)
+	s1 = s1.Merge(*s2)
+	s2 = s2.Merge(*s1)
 
 	assert.True(t, s1.Lookup("hello"))
 	assert.True(t, s1.Lookup("goodbye"))

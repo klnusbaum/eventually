@@ -4,8 +4,6 @@ type GSet struct {
 	currentSet map[string]bool
 }
 
-type GPayload map[string]bool
-
 func NewGSet(elements ...string) *GSet {
 	set := GSet{
 		currentSet: make(map[string]bool),
@@ -43,17 +41,14 @@ func (s *GSet) Diff(other *GSet) []string {
 	return diff
 }
 
-func (s *GSet) Serialize() GPayload {
-	payload := make(GPayload)
-	for e := range s.currentSet {
-		payload[e] = true
-	}
+func (s *GSet) Merge(other GSet) *GSet {
+	var elements []string
+	s.ForAll(func(e string) {
+		elements = append(elements, e)
+	})
+	other.ForAll(func(e string) {
+		elements = append(elements, e)
+	})
 
-	return payload
-}
-
-func (s *GSet) Merge(payload GPayload) {
-	for e := range payload {
-		s.currentSet[e] = true
-	}
+	return NewGSet(elements...)
 }

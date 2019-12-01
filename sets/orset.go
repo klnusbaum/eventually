@@ -7,8 +7,6 @@ type ORSet struct {
 	removes map[string]*GSet
 }
 
-type ORPayload map[string]GPayload
-
 func NewORSet(elements ...string) *ORSet {
 	set := &ORSet{
 		adds:    make(map[string]*GSet),
