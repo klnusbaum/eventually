@@ -6,7 +6,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-func TestSingle(t *testing.T) {
+func TestSingleGCounter(t *testing.T) {
 	counter := NewGCounter(uuid.Must(uuid.NewV4()), nil)
 
 	counter.Inc()
@@ -21,7 +21,7 @@ func TestSingle(t *testing.T) {
 	reqVal(t, 5, counter.Val())
 }
 
-func TestMulti(t *testing.T) {
+func TestMultiGCounter(t *testing.T) {
 	c1 := NewGCounter(uuid.Must(uuid.NewV4()), nil)
 	c2 := NewGCounter(uuid.Must(uuid.NewV4()), nil)
 
