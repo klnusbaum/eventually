@@ -1,6 +1,7 @@
 package sets
 
 import (
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,6 +18,21 @@ func TestSingleGSet(t *testing.T) {
 	assert.True(t, set.Lookup("kurtis"))
 
 	assert.False(t, set.Lookup("doesn't exist"))
+
+	var elements []string
+	set.ForAll(func(e string) {
+		elements = append(elements, e)
+	})
+
+	sort.Strings(elements)
+
+	assert.Equal(t, []string{"goodbye", "hello", "kurtis"}, elements)
+
+	other := NewGSet("hello", "other")
+	diff := set.Diff(other)
+	sort.Strings(diff)
+
+	assert.Equal(t, []string{"goodbye", "kurtis"}, diff)
 }
 
 func TestMultiGSet(t *testing.T) {

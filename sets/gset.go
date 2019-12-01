@@ -26,6 +26,23 @@ func (s *GSet) Lookup(element string) bool {
 	return s.currentSet[element]
 }
 
+func (s *GSet) ForAll(f func(string)) {
+	for element := range s.currentSet {
+		f(element)
+	}
+}
+
+func (s *GSet) Diff(other *GSet) []string {
+	var diff []string
+	for element := range s.currentSet {
+		if !other.Lookup(element) {
+			diff = append(diff, element)
+		}
+	}
+
+	return diff
+}
+
 func (s *GSet) Serialize() GPayload {
 	payload := make(GPayload)
 	for e := range s.currentSet {
