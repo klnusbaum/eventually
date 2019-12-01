@@ -1,6 +1,10 @@
 package sets
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestSingleGSet(t *testing.T) {
 	set := NewGSet()
@@ -8,9 +12,9 @@ func TestSingleGSet(t *testing.T) {
 	set.Add("goodbye")
 	set.Add("kurtis")
 
-	reqInclude(t, set, "hello")
-	reqInclude(t, set, "goodbye")
-	reqInclude(t, set, "kurtis")
+	assert.True(t, set.Lookup("hello"))
+	assert.True(t, set.Lookup("goodbye"))
+	assert.True(t, set.Lookup("kurtis"))
 }
 
 func TestMultiGSet(t *testing.T) {
@@ -25,13 +29,13 @@ func TestMultiGSet(t *testing.T) {
 	s2.Add("ashley")
 	s2.Add("kurtis")
 
-	reqInclude(t, s1, "hello")
-	reqInclude(t, s1, "goodbye")
-	reqInclude(t, s1, "kurtis")
+	assert.True(t, s1.Lookup("hello"))
+	assert.True(t, s1.Lookup("goodbye"))
+	assert.True(t, s1.Lookup("kurtis"))
 
-	reqInclude(t, s2, "cheese")
-	reqInclude(t, s2, "ashley")
-	reqInclude(t, s2, "kurtis")
+	assert.True(t, s2.Lookup("cheese"))
+	assert.True(t, s2.Lookup("ashley"))
+	assert.True(t, s2.Lookup("kurtis"))
 
 	p1 := s1.Serialize()
 	p2 := s2.Serialize()
@@ -39,15 +43,15 @@ func TestMultiGSet(t *testing.T) {
 	s1.Merge(p2)
 	s2.Merge(p1)
 
-	reqInclude(t, s1, "hello")
-	reqInclude(t, s1, "goodbye")
-	reqInclude(t, s1, "kurtis")
-	reqInclude(t, s1, "cheese")
-	reqInclude(t, s1, "ashley")
+	assert.True(t, s1.Lookup("hello"))
+	assert.True(t, s1.Lookup("goodbye"))
+	assert.True(t, s1.Lookup("kurtis"))
+	assert.True(t, s1.Lookup("cheese"))
+	assert.True(t, s1.Lookup("ashley"))
 
-	reqInclude(t, s2, "hello")
-	reqInclude(t, s2, "goodbye")
-	reqInclude(t, s2, "kurtis")
-	reqInclude(t, s2, "cheese")
-	reqInclude(t, s2, "ashley")
+	assert.True(t, s2.Lookup("hello"))
+	assert.True(t, s2.Lookup("goodbye"))
+	assert.True(t, s2.Lookup("kurtis"))
+	assert.True(t, s2.Lookup("cheese"))
+	assert.True(t, s2.Lookup("ashley"))
 }

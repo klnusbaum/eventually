@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/gofrs/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSingleGCounter(t *testing.T) {
@@ -13,12 +14,12 @@ func TestSingleGCounter(t *testing.T) {
 	counter.Inc()
 	counter.Inc()
 
-	reqVal(t, 3, counter.Val())
+	assert.Equal(t, 3, counter.Val())
 
 	counter.Inc()
 	counter.Inc()
 
-	reqVal(t, 5, counter.Val())
+	assert.Equal(t, 5, counter.Val())
 }
 
 func TestMultiGCounter(t *testing.T) {
@@ -30,11 +31,11 @@ func TestMultiGCounter(t *testing.T) {
 	c1.Inc()
 	c1.Inc()
 
-	reqVal(t, 4, c1.Val())
-	reqVal(t, 0, c2.Val())
+	assert.Equal(t, 4, c1.Val())
+	assert.Equal(t, 0, c2.Val())
 
 	c2.Inc()
-	reqVal(t, 1, c2.Val())
+	assert.Equal(t, 1, c2.Val())
 
 	p1 := c1.Serialize()
 	p2 := c2.Serialize()
@@ -42,6 +43,6 @@ func TestMultiGCounter(t *testing.T) {
 	c1.Merge(p2)
 	c2.Merge(p1)
 
-	reqVal(t, 5, c1.Val())
-	reqVal(t, 5, c2.Val())
+	assert.Equal(t, 5, c1.Val())
+	assert.Equal(t, 5, c2.Val())
 }
