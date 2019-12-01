@@ -9,14 +9,14 @@ type GCounter struct {
 	myID   uuid.UUID
 }
 
-func NewGCounter(myID uuid.UUID, init Payload) GCounter {
+func NewGCounter(myID uuid.UUID, init Payload) *GCounter {
 	counter := GCounter{
 		counts: make(Payload, len(init)),
 		myID:   myID,
 	}
 
 	counter.Merge(init)
-	return counter
+	return &counter
 }
 
 func (c *GCounter) Inc() {

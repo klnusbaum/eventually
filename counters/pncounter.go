@@ -5,12 +5,12 @@ import (
 )
 
 type PNCounter struct {
-	posCounter GCounter
-	negCounter GCounter
+	posCounter *GCounter
+	negCounter *GCounter
 	myID       uuid.UUID
 }
 
-func NewPNCounter(myID uuid.UUID, pos Payload, neg Payload) PNCounter {
+func NewPNCounter(myID uuid.UUID, pos Payload, neg Payload) *PNCounter {
 	counter := PNCounter{
 		posCounter: NewGCounter(myID, pos),
 		negCounter: NewGCounter(myID, neg),
@@ -19,7 +19,7 @@ func NewPNCounter(myID uuid.UUID, pos Payload, neg Payload) PNCounter {
 
 	counter.posCounter.Merge(pos)
 	counter.negCounter.Merge(neg)
-	return counter
+	return &counter
 }
 
 func (c *PNCounter) Inc() {
