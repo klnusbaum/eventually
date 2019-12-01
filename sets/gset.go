@@ -17,20 +17,36 @@ func NewGSet(elements ...string) *GSet {
 }
 
 func (s *GSet) Add(element string) {
+	if s == nil {
+		return
+	}
+
 	s.currentSet[element] = true
 }
 
 func (s *GSet) Lookup(element string) bool {
+	if s == nil {
+		return false
+	}
+
 	return s.currentSet[element]
 }
 
 func (s *GSet) ForAll(f func(string)) {
+	if s == nil {
+		return
+	}
+
 	for element := range s.currentSet {
 		f(element)
 	}
 }
 
 func (s *GSet) Diff(other *GSet) []string {
+	if s == nil {
+		return []string{}
+	}
+
 	var diff []string
 	for element := range s.currentSet {
 		if !other.Lookup(element) {

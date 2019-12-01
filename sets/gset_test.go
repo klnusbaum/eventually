@@ -73,12 +73,27 @@ func TestMultiGSet(t *testing.T) {
 	assert.True(t, s2.Lookup("cheese"))
 	assert.True(t, s2.Lookup("ashley"))
 	assert.False(t, s2.Lookup("doesn't exist"))
+}
+
+func TestNilGSet(t *testing.T) {
+	s1 := NewGSet("hello", "goodbye")
 
 	var nilSet *GSet
-	nilMerged := nilSet.Merge(s1)
-	assert.True(t, nilMerged.Lookup("hello"))
-	assert.True(t, nilMerged.Lookup("goodbye"))
-	assert.True(t, nilMerged.Lookup("kurtis"))
-	assert.True(t, nilMerged.Lookup("cheese"))
-	assert.True(t, nilMerged.Lookup("ashley"))
+	diff := nilSet.Diff(s1)
+	assert.Empty(t, diff)
+
+	nilSet = nilSet.Merge(s1)
+	assert.True(t, nilSet.Lookup("hello"))
+	assert.True(t, nilSet.Lookup("goodbye"))
+
+	nilSet = nil
+	nilSet.Add("kurtis")
+	assert.False(t, nilSet.Lookup("kurtis"))
+
+	var elements []string
+	nilSet.ForAll(func(e string) {
+		elements = append(elements, e)
+	})
+
+	assert.Empty(t, elements)
 }
