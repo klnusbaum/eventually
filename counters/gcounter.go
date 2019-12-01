@@ -12,8 +12,6 @@ type GCounter struct {
 	m      sync.RWMutex
 }
 
-type Payload map[uuid.UUID]int
-
 func NewGCounter(myID uuid.UUID, init Payload) GCounter {
 	counter := GCounter{
 		counts: make(Payload, len(init)),
