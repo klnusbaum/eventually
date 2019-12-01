@@ -45,9 +45,3 @@ func TestMultiGCounter(t *testing.T) {
 	reqVal(t, 5, c1.Val())
 	reqVal(t, 5, c2.Val())
 }
-
-func reqVal(t *testing.T, wanted, got int) {
-	if got != wanted {
-		t.Fatalf("Wanted: %d, Got %d", wanted, got)
-	}
-}
