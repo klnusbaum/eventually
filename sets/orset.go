@@ -70,3 +70,37 @@ func (s *ORSet) ForAll(f func(string)) {
 		f(element)
 	}
 }
+
+func (s *ORSet) Merge(other *ORSet) *ORSet {
+	mergedAdds := make(map[string]*GSet)
+	mergedRemoves := make(map[string]*GSet)
+
+	addKeys := make(map[string]struct{})
+	for e := range s.adds {
+		addKeys[e] = struct{}{}
+	}
+	for e := range other.adds {
+		addKeys[e] = struct{}{}
+	}
+
+	for e := range addKeys {
+		mergedAdds[e] = s.adds[e].Merge(other.adds[e])
+	}
+
+	removeKeys := make(map[string]struct{})
+	for e := range s.removes {
+		removeKeys[e] = struct{}{}
+	}
+	for e := range other.removes {
+		removeKeys[e] = struct{}{}
+	}
+
+	for e := range removeKeys {
+		mergedRemoves[e] = s.removes[e].Merge(other.removes[e])
+	}
+
+	return &ORSet{
+		adds:    mergedAdds,
+		removes: mergedRemoves,
+	}
+}
